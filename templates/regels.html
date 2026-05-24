@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<h1>Regels</h1>
+<p>Geef 20 verschillende landen op die deelnemen aan het WK  voetbal 2026: 15 met een positieve factor (aflopend van 15 naar 1) en 5 met een negatieve factor (aflopend van -1 naar -5).</p>
+<p>De punten worden als volgt berekend:</p>
+<ul>
+    <li>Bij winst krijgt dat land 3 punten
+    Gelijkspel met doelpunten = 2 punten
+    Gelijkspel 0-0 = 1 punt
+    Nederlaag = 0 punten
+    </li>
+    <li>Voor elk land met een positieve factor, krijg je de punten dat ze die matchdag hebben verdiend maal de factor van dat land.</li>
+    <li>Voor elk land met een negatieve factor, verlies je de punten dat ze die matchdag hebben verdiend maal de factor van dat land.</li>
+</ul>
+</a>
+<p> De pronostiek wordt afgesloten om 9 juni om 23:59.</p>
+<a href="{{ url_for('dashboard') }}">
+    <button>Klik hier om terug te gaan naar het dashboard</button>
+</a>
+
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<h1>Dashboard</h1>
+<p>Welkom op het dashboard! Hier kun je je pronostiek beheren de resultaten en je ranking in de competitie bekijken.</p>
+<a href="{{ url_for('regels') }}">
+    <button>Klik hier om de regels te bekijken</button>
+</a>
+
+{% endblock %}

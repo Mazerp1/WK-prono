@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<div class="register-box">
+    <h1>Registreer</h1>
+
+    <form method="post" action="/register">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" required autocomplete="username">
+
+        <label for="password">Paswoord</label>
+        <input type="password" id="password" name="password" required autocomplete="new-password">
+
+        <button type="submit">Registreer</button>
+    </form>
+
+    <div class="message">
+        <p>Al een account? <a href="/login">Login</a>.</p>
+    </div>
+</div>
+
+{% endblock %}
