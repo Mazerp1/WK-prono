@@ -1,0 +1,99 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<h1>Kies 20 landen + factoren</h1>
+
+<form method="POST" id="pickForm">
+
+  <table>
+    <tr>
+      <th>Land</th>
+      <th>Factor</th>
+    </tr>
+
+    {% for i in range(20) %}
+    <tr>
+
+      <!-- COUNTRY -->
+      <td>
+        <select name="country_{{ i }}" class="country">
+          <option value="">-- kies land --</option>
+          {% for country in countries %}
+            <option value="{{ country }}">{{ country }}</option>
+          {% endfor %}
+        </select>
+      </td>
+
+      <!-- FACTOR -->
+      <td>
+        <select name="factor_{{ i }}" class="factor">
+          <option value="">-- kies factor --</option>
+          {% for f in [15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,-1,-2,-3,-4,-5] %}
+            <option value="{{ f }}">{{ f }}</option>
+          {% endfor %}
+        </select>
+      </td>
+
+    </tr>
+    {% endfor %}
+
+  </table>
+
+  <button type="submit">Opslaan</button>
+
+</form>
+
+<script>
+const countrySelects = document.querySelectorAll(".country");
+const factorSelects = document.querySelectorAll(".factor");
+
+// Prevent duplicates
+function updateOptions() {
+
+    let selectedCountries = [];
+    let selectedFactors = [];
+
+    countrySelects.forEach(sel => {
+        if (sel.value) selectedCountries.push(sel.value);
+    });
+
+    factorSelects.forEach(sel => {
+        if (sel.value) selectedFactors.push(sel.value);
+    });
+
+    countrySelects.forEach(sel => {
+        let current = sel.value;
+
+        sel.querySelectorAll("option").forEach(opt => {
+            if (!opt.value) return;
+
+            if (selectedCountries.includes(opt.value) && opt.value !== current) {
+                opt.hidden = true;
+            } else {
+                opt.hidden = false;
+            }
+        });
+    });
+
+    factorSelects.forEach(sel => {
+        let current = sel.value;
+
+        sel.querySelectorAll("option").forEach(opt => {
+            if (!opt.value) return;
+
+            if (selectedFactors.includes(opt.value) && opt.value !== current) {
+                opt.hidden = true;
+            } else {
+                opt.hidden = false;
+            }
+        });
+    });
+}
+
+countrySelects.forEach(sel => sel.addEventListener("change", updateOptions));
+factorSelects.forEach(sel => sel.addEventListener("change", updateOptions));
+
+</script>
+
+{% endblock %}
