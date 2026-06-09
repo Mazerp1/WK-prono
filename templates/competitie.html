@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<div class="container">
+
+    <h1>Competitie maken</h1>
+
+    <p>Jouw competitie is aangemaakt:</p>
+
+    <div style="font-size: 24px; font-weight: bold; margin: 20px 0;">
+        {{ code }}
+    </div>
+
+    <p>Deel deze code met je vrienden 👇</p>
+
+    <input type="text" value="{{ code }}" readonly style="padding: 10px; font-size: 18px; text-align: center;">
+
+    <br><br>
+
+    <a href="/dashboard">
+        <button>Ga naar dashboard</button>
+    </a>
+
+</div>
+
+{% endblock %}

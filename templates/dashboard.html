@@ -2,13 +2,56 @@
 
 {% block body %}
 
-<h1>Dashboard</h1>
-<p>Welkom op het dashboard! Hier kun je je pronostiek beheren de resultaten en je ranking in de competitie bekijken.</p>
-<a href="{{ url_for('regels') }}">
-    <button>Klik hier om de regels te bekijken</button>
-</a>
-<a href="{{ url_for('keuze') }}">
-    <button>Klik hier om je pronostiek in de vullen</button>
-</a>
+<main class="dashboard-content">
+    <p>Welkom op het dashboard! Hier kun je je pronostiek beheren de resultaten en je ranking in de competitie bekijken.</p>
+
+    <div class="dashboard-grid">
+        <a class="dashboard-tile" href="{{ url_for('regels') }}">
+            <span class="dashboard-symbol">R</span>
+            <span>Regels</span>
+        </a>
+
+        {% if "user_id" in session %}
+            <a class="dashboard-tile" href="{{ url_for('keuze') }}">
+                <span class="dashboard-symbol">P</span>
+                <span>Pronostiek invullen</span>
+            </a>
+            <a class="dashboard-tile" href="{{ url_for('punten') }}">
+                <span class="dashboard-symbol">S</span>
+                <span>Punten</span>
+            </a>
+            <a class="dashboard-tile" href="{{ url_for('competitie') }}">
+                <span class="dashboard-symbol">C</span>
+                <span>Competitie aanmaken</span>
+            </a>
+        {% endif %}
+    </div>
+
+    {% if "user_id" in session %}
+        <a class="Topright" href="{{ url_for('logout') }}">
+            <button>Log uit</button>
+        </a>
+    {% else %}
+        <a class="Topright" href="{{ url_for('login') }}">
+            <button>Log in</button>
+        </a>
+    {% endif %}
+</main>
+
+<aside class="leaderboard">
+    <h1>Leaderboard</h1>
+    {% if leaderboard %}
+        <ol>
+            {% for username, points in leaderboard %}
+                <li>
+                    <span>{{ username }}</span>
+                    <strong>{{ points }}</strong>
+                </li>
+            {% endfor %}
+        </ol>
+    {% else %}
+        <p>Nog geen spelers.</p>
+    {% endif %}
+</aside>
 
 {% endblock %}

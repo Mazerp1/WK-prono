@@ -1,0 +1,276 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background-color: #f4f7f3;
+    color: #1f2d24;
+    font-family: Arial, sans-serif;
+    line-height: 1.5;
+}
+
+
+.bar {
+    background-color: #0b116b;
+    color: white;
+    position: relative;
+    padding: 22px;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+}
+
+.wk-logo {
+    position: absolute;
+    top: 10px;
+    left: 16px;
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+}
+
+
+
+h1 {
+    color: #ffffff;
+}
+
+h2 {
+    color: #132691;
+}
+
+a {
+    color: #110b6b;
+    font-weight: bold;
+}
+
+button {
+    background-color: #110b6b;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 14px;
+    margin: 6px 4px 6px 0;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+button:hover {
+    background-color: #150444;
+}
+
+.Topright{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.Topright button{
+    background-color: white;
+    color: #0f0961;
+}
+
+.Topright button:hover {
+    background-color: #e8f3ec;
+}
+
+.login-card,
+.register-box {
+    background-color: white;
+    border: 1px solid #d8e3dc;
+    border-radius: 8px;
+    margin-top: 24px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
+}
+
+body > form {
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
+
+label {
+    display: block;
+    margin-top: 12px;
+    margin-bottom: 4px;
+    font-weight: bold;
+}
+
+input,
+select {
+    width: 100%;
+    padding: 9px;
+    border: 1px solid #c6d3cb;
+    border-radius: 6px;
+    background-color: white;
+}
+
+input:focus,
+select:focus {
+    outline: 2px solid #9b9fd0;
+    border-color: #0d0b6b;
+}
+
+table {
+    width: calc(100% - 40px);
+    border-collapse: collapse;
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
+}
+
+th,
+td {
+    padding: 10px;
+    border-bottom: 1px solid #d8e3dc;
+    text-align: left;
+}
+
+th {
+    background-color: #e8f3ec;
+    color: #120b4f;
+}
+
+ul {
+    background-color: white;
+    border-radius: 8px;
+    padding-top: 16px;
+    padding-bottom: 16px;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.04);
+}
+
+.info {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.message {
+    color: #545263;
+}
+
+.dashboard-content {
+    max-width: 700px;
+    margin: 30px auto 0;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.dashboard-content p {
+    text-align: center;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 180px);
+    gap: 22px;
+    width: fit-content;
+    margin: 28px auto 0;
+}
+
+.dashboard-tile {
+    width: 180px;
+    height: 180px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    background-color: white;
+    border: 2px solid #d8e3dc;
+    border-radius: 8px;
+    color: #110b6b;
+    text-align: center;
+    text-decoration: none;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.07);
+}
+
+.dashboard-tile:hover {
+    border-color: #110b6b;
+    transform: translateY(-2px);
+}
+
+.dashboard-symbol {
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #eef2ff;
+    border-radius: 8px;
+    color: #110b6b;
+    font-size: 32px;
+    font-weight: bold;
+}
+
+.leaderboard {
+    position: fixed;
+    top: 95px;
+    right: 18px;
+    width: 220px;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+    background-color: white;
+    border: 1px solid #d8e3dc;
+    border-radius: 8px;
+    padding: 14px;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+}
+
+.leaderboard h1 {
+    margin: 0 0 10px;
+    color: #c78a00;
+    font-size: 20px;
+}
+
+.leaderboard ol {
+    list-style-position: inside;
+    margin: 0;
+    padding: 0;
+}
+
+.leaderboard li {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #eef2ef;
+}
+
+.leaderboard li:last-child {
+    border-bottom: none;
+}
+
+.leaderboard strong {
+    color: #110b6b;
+}
+
+@media (max-width: 600px) {
+    .bar {
+        padding-top: 76px;
+    }
+
+    .wk-logo {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .dashboard-content {
+        margin-top: 20px;
+    }
+
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+        justify-items: center;
+        width: 100%;
+    }
+
+    .leaderboard {
+        position: static;
+        width: auto;
+        max-width: 900px;
+        max-height: none;
+        margin: 16px 20px;
+    }
+}

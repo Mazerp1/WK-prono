@@ -2,7 +2,7 @@
 
 {% block body %}
 
-<h1>Kies 20 landen + factoren</h1>
+<h2>Kies 20 landen + factoren</h2>
 
 <form method="POST" id="pickForm">
 
@@ -18,9 +18,9 @@
       <!-- COUNTRY -->
       <td>
         <select name="country_{{ i }}" class="country">
-          <option value="">-- kies land --</option>
+          <option value="">kies land</option>
           {% for country in countries %}
-            <option value="{{ country }}">{{ country }}</option>
+            <option value="{{ country[0] }}">{{ country[1] }}</option>
           {% endfor %}
         </select>
       </td>
@@ -28,7 +28,7 @@
       <!-- FACTOR -->
       <td>
         <select name="factor_{{ i }}" class="factor">
-          <option value="">-- kies factor --</option>
+          <option value="">kies factor</option>
           {% for f in [15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,-1,-2,-3,-4,-5] %}
             <option value="{{ f }}">{{ f }}</option>
           {% endfor %}
@@ -43,12 +43,35 @@
   <button type="submit">Opslaan</button>
 
 </form>
+<p id="timer"></p>
+
+<script>
+const deadline = new Date("2026-06-11T19:00:00Z").getTime();
+
+const x = setInterval(function () {
+    const now = new Date().getTime();
+    const distance = deadline - now;
+
+    if (distance < 0) {
+        clearInterval(x);
+        document.getElementById("timer").innerHTML = "GESLOTEN";
+        return;
+    }
+
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((distance / (1000 * 60)) % 60);
+
+    document.getElementById("timer").innerHTML =
+        days + "d " + hours + "u " + minutes + "m";
+}, 1000);
+</script>
 
 <script>
 const countrySelects = document.querySelectorAll(".country");
 const factorSelects = document.querySelectorAll(".factor");
 
-// Prevent duplicates
+// gekozen landen niet meer verschijnen in lijst
 function updateOptions() {
 
     let selectedCountries = [];

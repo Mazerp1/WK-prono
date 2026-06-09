@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<h2>Punten</h2>
+<p>Hier zie je hoeveel punten je hebt gescoord op elke matchdag en wat je totale score is.</p>
+<table>
+    <tr>
+        <th>Punten</th>
+    </tr>
+    <tr>
+        <td>{{ sum }}</td>
+    </tr>
+</table>
+<a href="{{ url_for('dashboard') }}">
+    <button>Klik hier om terug te gaan naar het dashboard</button>
+</a>
+
+{% endblock %}
