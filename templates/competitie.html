@@ -2,25 +2,31 @@
 
 {% block body %}
 
-<div class="container">
+<div class="register-box">
 
-    <h1>Competitie maken</h1>
+    <h2>Competitie</h2>
 
-    <p>Jouw competitie is aangemaakt:</p>
+    {% if league %}
 
-    <div style="font-size: 24px; font-weight: bold; margin: 20px 0;">
-        {{ code }}
-    </div>
+        <p><strong>Jouw competitie code:</strong></p>
 
-    <p>Deel deze code met je vrienden 👇</p>
+        <h1 style="color:#110b6b;">
+            {{ league[1] }}
+        </h1>
 
-    <input type="text" value="{{ code }}" readonly style="padding: 10px; font-size: 18px; text-align: center;">
+        <a href="{{ url_for('league_view', league_id=league[0]) }}">
+            <button>Bekijk competitie</button>
+        </a>
 
-    <br><br>
+    {% else %}
 
-    <a href="/dashboard">
-        <button>Ga naar dashboard</button>
-    </a>
+        <p>Je zit nog niet in een competitie.</p>
+
+        <a href="{{ url_for('join') }}">
+            <button>Join competitie</button>
+        </a>
+
+    {% endif %}
 
 </div>
 

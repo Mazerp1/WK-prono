@@ -1,5 +1,4 @@
 from datetime import datetime
-
 from flask import Flask, render_template, request, redirect, session
 import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -21,7 +20,6 @@ WORLD_CUP_TEAMS = [
     "Uruguay", "Verenigde Staten", "Zuid-Afrika", "Zuid-Korea",
     "Zweden", "Zwitserland"
 ]
-
 
 #Registreer
 @app.route("/register", methods=["GET", "POST"])
@@ -98,6 +96,8 @@ def logout():
     return redirect("/")
 
 
+
+
 #Dashboard
 @app.route("/")
 def dashboard():
@@ -121,67 +121,113 @@ def dashboard():
     return render_template("dashboard.html", leaderboard=leaderboard)
 
 
-#Regels
+# ---------------- REGELS ----------------
 @app.route("/regels")
 def regels():
     return render_template("regels.html")
-#Punten
+
+
+# ---------------- PUNTEN ----------------
 @app.route("/punten")
 def punten():
-#check voor user id
+
     if "user_id" not in session:
         return redirect("/login")
 
     conn = sqlite3.connect("wk_prono.db")
     cursor = conn.cursor()
-#haal alles uit database om punten te berekenen
-    cursor.execute("""
-    SELECT countries.score, picks.factor
-    FROM picks
-    JOIN countries
-    ON picks.country_id = countries.id
-    WHERE picks.user_id = ?
-    """, (session["user_id"],))
-    sum = 0
-    for row in cursor.fetchall():
-        score = row[0]
-        factor = row[1]
-        sum += score * factor
-    conn.close()
-    return render_template("punten.html", sum=sum)
-#Competitie
 
+    cursor.execute("""
+        SELECT countries.score, picks.factor
+        FROM picks
+        JOIN countries ON picks.country_id = countries.id
+        WHERE picks.user_id = ?
+    """, (session["user_id"],))
+
+    total = 0
+
+    for score, factor in cursor.fetchall():
+        total += score * factor
+
+    conn.close()
+
+    return render_template("punten.html", sum=total)
+
+
+# ---------------- COMPETITIE (VIEW ONLY) ----------------
 @app.route("/competitie")
 def competitie():
-#check voor user id
+
     if "user_id" not in session:
         return redirect("/login")
-#maak unieke code
-    code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
 
     conn = sqlite3.connect("wk_prono.db")
     cursor = conn.cursor()
 
-    #competitie aanmaken in db
     cursor.execute("""
-        INSERT INTO leagues (name, join_code)
-        VALUES (?, ?)
-    """, ("Mijn competitie", code))
+        SELECT leagues.id, leagues.join_code
+        FROM users
+        JOIN leagues ON users.league_id = leagues.id
+        WHERE users.id = ?
+    """, (session["user_id"],))
 
-    league_id = cursor.lastrowid
-
-    #user aan competitie zetten
-    cursor.execute("""
-        UPDATE users
-        SET league_id = ?
-        WHERE id = ?
-    """, (league_id, session["user_id"]))
-
-    conn.commit()
+    league = cursor.fetchone()
     conn.close()
 
-    return f"Deel deze code: {code}"
+    return render_template("competitie.html", league=league)
 
+
+# ---------------- LEAGUE OVERVIEW ----------------
+@app.route("/league/<int:league_id>")
+def league_view(league_id):
+
+    conn = sqlite3.connect("wk_prono.db")
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT id, username
+        FROM users
+        WHERE league_id = ?
+    """, (league_id,))
+
+    users = cursor.fetchall()
+
+    result = []
+
+    for user_id, username in users:
+
+        cursor.execute("""
+            SELECT countries.name, picks.factor, countries.score
+            FROM picks
+            JOIN countries ON picks.country_id = countries.id
+            WHERE picks.user_id = ?
+            ORDER BY picks.factor DESC
+        """, (user_id,))
+
+        rows = cursor.fetchall()
+
+        total = 0
+        picks = []
+
+        for country, factor, score in rows:
+            total += score * factor
+            picks.append({
+                "country": country,
+                "factor": factor
+            })
+
+        result.append({
+            "username": username,
+            "total": total,
+            "picks": picks
+        })
+
+    conn.close()
+
+    return render_template("league.html", result=result)
+
+
+# ---------------- JOIN LEAGUE ----------------
 @app.route("/join", methods=["GET", "POST"])
 def join():
 
@@ -195,7 +241,6 @@ def join():
         conn = sqlite3.connect("wk_prono.db")
         cursor = conn.cursor()
 
-        #zoek competitie
         cursor.execute("""
             SELECT id
             FROM leagues
@@ -205,11 +250,11 @@ def join():
         league = cursor.fetchone()
 
         if not league:
+            conn.close()
             return "Code bestaat niet"
 
         league_id = league[0]
 
-        #user koppelen
         cursor.execute("""
             UPDATE users
             SET league_id = ?
@@ -219,14 +264,15 @@ def join():
         conn.commit()
         conn.close()
 
-        return redirect("/dashboard")
+        return redirect(f"/league/{league_id}")
 
     return render_template("join.html")
 
-#Keuze
+
+# ---------------- KEUZE ----------------
 @app.route("/keuze", methods=["GET", "POST"])
 def keuze():
-#check voor user id
+
     if "user_id" not in session:
         return redirect("/login")
 
@@ -234,11 +280,12 @@ def keuze():
 
     if datetime.now() > DEADLINE:
         return "De pronostiek is gesloten"
-#data van user ophalen
-    if request.method == "POST":
 
-        conn = sqlite3.connect("wk_prono.db")
-        cursor = conn.cursor()
+    conn = sqlite3.connect("wk_prono.db")
+    cursor = conn.cursor()
+
+    # ---------------- POST ----------------
+    if request.method == "POST":
 
         selected_countries = []
         selected_factors = []
@@ -249,21 +296,22 @@ def keuze():
             factor = request.form.get(f"factor_{i}")
 
             if not country_id or not factor:
+                conn.close()
                 return "Vul alle velden in"
 
             selected_countries.append(int(country_id))
             selected_factors.append(int(factor))
 
-        # check dubell land of factor
         if len(set(selected_countries)) != 20:
+            conn.close()
             return "Duplicate countries not allowed"
 
         if len(set(selected_factors)) != 20:
+            conn.close()
             return "Duplicate factors not allowed"
 
         user_id = session["user_id"]
 
-        #indien al picks verwijder en vul in
         cursor.execute("""
             DELETE FROM picks
             WHERE user_id = ?
@@ -282,17 +330,21 @@ def keuze():
         conn.commit()
         conn.close()
 
-        return redirect("/dashboard")
+        return redirect("/")
 
-    return render_template("keuze.html")
+    # ---------------- GET ----------------
+    cursor.execute("""
+        SELECT id, dutch_name
+        FROM countries
+        ORDER BY dutch_name ASC
+    """)
 
-    # vul lenderlandse naam toe
-    cursor.execute("SELECT id, dutch_name FROM countries ORDER BY dutch_name ASC")
     countries = cursor.fetchall()
-
     conn.close()
 
     return render_template("keuze.html", countries=countries)
 
+
+# ---------------- START APP ----------------
 if __name__ == "__main__":
     app.run(debug=True)

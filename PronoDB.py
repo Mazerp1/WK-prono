@@ -52,19 +52,12 @@ CREATE TABLE IF NOT EXISTS processed_matches (
     api_match_id INTEGER PRIMARY KEY
 );
 
--- LEAGUES / COMPETITIONS
+-- league
 CREATE TABLE IF NOT EXISTS leagues (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     join_code TEXT UNIQUE NOT NULL,
-    owner_id INTEGER NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- SETTINGS (optional but VERY useful later)
-CREATE TABLE IF NOT EXISTS settings (
-    key TEXT PRIMARY KEY,
-    value TEXT
 );
 """)
 

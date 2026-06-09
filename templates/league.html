@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<div class="register-box">
+
+    <h2>Competitie overzicht</h2>
+
+    {% for user in result %}
+
+        <h3>{{ user.username }} - Totaal: {{ user.total }}</h3>
+
+        <table>
+            <tr>
+                <th>Land</th>
+                <th>Factor</th>
+            </tr>
+
+            {% for pick in user.picks %}
+            <tr>
+                <td>{{ pick.country }}</td>
+                <td>{{ pick.factor }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+    {% endfor %}
+
+</div>
+
+{% endblock %}

@@ -2,26 +2,16 @@
 
 {% block body %}
 
-<div class="container">
+<div class="register-box">
 
-    <h1>Deelnemen aan competitie</h1>
-
-    <p>Voer de code in die je van je vriend hebt gekregen:</p>
+    <h2>Join competitie</h2>
 
     <form method="POST">
+        <label>Code</label>
+        <input type="text" name="code" required>
 
-        <input type="text" name="code" placeholder="Bijv. A7K92P" required
-               style="padding: 10px; font-size: 18px;">
-
-        <br><br>
-
-        <button type="submit">Join competitie</button>
-
+        <button type="submit">Join</button>
     </form>
-
-    <br>
-
-    <a href="/dashboard">Terug</a>
 
 </div>
 
