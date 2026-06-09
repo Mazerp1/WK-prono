@@ -195,7 +195,7 @@ def join():
         conn = sqlite3.connect("wk_prono.db")
         cursor = conn.cursor()
 
-        # 1. zoek competitie
+        #zoek competitie
         cursor.execute("""
             SELECT id
             FROM leagues
@@ -209,7 +209,7 @@ def join():
 
         league_id = league[0]
 
-        # 2. user koppelen
+        #user koppelen
         cursor.execute("""
             UPDATE users
             SET league_id = ?
